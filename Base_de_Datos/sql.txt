@@ -1,0 +1,33 @@
+-- 1. PREPARAR EL TERRENO (Borrar lo viejo)
+DROP TABLE IF EXISTS paquetes;
+DROP TABLE IF EXISTS agentes;
+
+-- 2. TABLA DE AGENTES (Usuarios)
+CREATE TABLE agentes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL, -- Espacio para el Hash seguro
+    nombre VARCHAR(100)
+);
+
+-- 3. TABLA DE PAQUETES (Entregas)
+CREATE TABLE paquetes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    direccion VARCHAR(255) NOT NULL,
+    destinatario VARCHAR(100) NOT NULL,
+    estado ENUM('pendiente', 'entregado') DEFAULT 'pendiente',
+    agente_id INT,
+    
+    -- COORDENADAS DEL DESTINO (Para pintar la ruta azul en el mapa)
+    lat_dest VARCHAR(50),
+    lng_dest VARCHAR(50),
+
+    -- EVIDENCIA DE ENTREGA (Lo que llena el agente al final)
+    evidencia_foto VARCHAR(255),
+    latitud_entrega VARCHAR(50),
+    longitud_entrega VARCHAR(50),
+    fecha_entrega DATETIME,
+    
+    -- RELACIÓN CON EL AGENTE
+    FOREIGN KEY (agente_id) REFERENCES agentes(id) ON DELETE CASCADE
+);
